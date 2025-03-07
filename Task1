@@ -1,0 +1,150 @@
+RESPONSIVE LANDING PAGE Create an interactive navigation menu that changes color or style when scrolled or when hovering over a menu item. The navigation menu should have a fixed position and be visible on all pages.
+
+CODE:
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Navigation Menu</title>
+    <style>
+        body {
+            margin: 0; 
+            padding-top: 60px;
+        }
+
+        nav {
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f0f0f0; 
+            padding: 10px;
+            z-index: 100; 
+            transition: background-color 0.3s ease; 
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-align: center; 
+        }
+
+        nav li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333; 
+            padding: 5px 10px;
+            border-radius: 5px; 
+            transition: color 0.3s ease, background-color 0.3s ease; 
+        }
+
+        nav a:hover,
+        nav a.active { 
+            color: #fff;
+            background-color: #007bff; 
+        }
+
+    
+        section {
+            height: 500px;
+            padding: 20px;
+        }
+
+        #home { background-color: #f8f9fa; }
+        #about { background-color: #e9ecef; }
+        #services { background-color: #d1d5db; }
+        #contact { background-color: #ced4da; }
+
+    </style>
+</head>
+<body>
+
+    <nav id="myNavbar">
+        <ul>
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home">
+        <h2>Home</h2>
+        <p>Home content goes here.</p>
+    </section>
+    <section id="about">
+        <h2>About</h2>
+        <p>About us content.</p>
+    </section>
+    <section id="services">
+        <h2>Services</h2>
+        <p>Our services detailed here.</p>
+    </section>
+    <section id="contact">
+        <h2>Contact</h2>
+        <p>Contact information.</p>
+    </section>
+
+
+    <script>
+        const navLinks = document.querySelectorAll('nav a');
+        const sections = document.querySelectorAll('section');
+        const nav = document.getElementById('myNavbar');
+
+        window.addEventListener('scroll', () => {
+            let currentSection = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 70; 
+                const sectionHeight = section.clientHeight;
+
+                if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
+                    currentSection = section.id;
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === currentSection) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Change navbar background on scroll (optional)
+            if (window.pageYOffset > 0) {
+                nav.style.backgroundColor = '#343a40'; 
+            } else {
+                nav.style.backgroundColor = '#f0f0f0'; 
+            }
+
+
+        });
+
+        // Smooth scrolling (optional - add if needed)
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                window.scrollTo({
+                    top: targetElement.offsetTop - 60, 
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+
+    </script>
+
+</body>
+</html>
