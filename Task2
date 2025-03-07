@@ -1,0 +1,153 @@
+# TAsk2
+  STOPWATCH WEB APPLICATION Create an interactive and user-friendly stopwatch web application. Implement functions for starting, pausing, and resetting the stopwatch, as well as tracking and displaying lap times, users can accurately measure and record time intervals.
+
+## CODE:
+
+HTML:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch App</title>
+    <link rel="stylesheet" href="C:\Users\satya\Music\htmlcss\.vscode\css&jsfiles\task2.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Stopwatch</h1>
+        <div id="display">00:00:00</div>
+        <div class="buttons">
+            <button id="startPauseBtn">Start</button>
+            <button id="lapBtn" disabled>Lap</button>
+            <button id="resetBtn" disabled>Reset</button>
+        </div>
+        <ul id="laps"></ul>
+    </div>
+    <script src="C:\Users\satya\Music\htmlcss\.vscode\css&jsfiles\task2.js"></script>
+</body>
+</html>
+
+CSS:
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 50px;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin: auto;
+}
+
+h1 {
+    margin-bottom: 10px;
+}
+
+#display {
+    font-size: 2em;
+    margin: 20px 0;
+}
+
+.buttons button {
+    font-size: 1em;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#startPauseBtn {
+    background: green;
+    color: white;
+}
+
+#lapBtn {
+    background: blue;
+    color: white;
+}
+
+#resetBtn {
+    background: red;
+    color: white;
+}
+
+#laps {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+#laps li {
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+}
+
+JAVASCRIPT:
+
+let timer;
+let startTime;
+let elapsedTime = 0;
+let running = false;
+let lapCount = 0;
+
+const display = document.getElementById('display');
+const startPauseBtn = document.getElementById('startPauseBtn');
+const lapBtn = document.getElementById('lapBtn');
+const resetBtn = document.getElementById('resetBtn');
+const lapsContainer = document.getElementById('laps');
+
+function formatTime(ms) {
+    let date = new Date(ms);
+    let minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    let seconds = date.getUTCSeconds().toString().padStart(2, '0');
+    let milliseconds = Math.floor(date.getUTCMilliseconds() / 10).toString().padStart(2, '0');
+    return `${minutes}:${seconds}:${milliseconds}`;
+}
+
+startPauseBtn.addEventListener('click', () => {
+    if (running) {
+        clearInterval(timer);
+        elapsedTime += Date.now() - startTime;
+        startPauseBtn.textContent = "Start";
+        lapBtn.disabled = true;
+    } else {
+        startTime = Date.now();
+        timer = setInterval(() => {
+            display.textContent = formatTime(elapsedTime + (Date.now() - startTime));
+        }, 10);
+        startPauseBtn.textContent = "Pause";
+        lapBtn.disabled = false;
+        resetBtn.disabled = false;
+    }
+    running = !running;
+});
+
+lapBtn.addEventListener('click', () => {
+    if (running) {
+        lapCount++;
+        const lapTime = formatTime(elapsedTime + (Date.now() - startTime));
+        const lapItem = document.createElement('li');
+        lapItem.textContent = `Lap ${lapCount}: ${lapTime}`;
+        lapsContainer.appendChild(lapItem);
+    }
+});
+
+resetBtn.addEventListener('click', () => {
+    clearInterval(timer);
+    elapsedTime = 0;
+    running = false;
+    lapCount = 0;
+    display.textContent = "00:00:00";
+    startPauseBtn.textContent = "Start";
+    lapBtn.disabled = true;
+    resetBtn.disabled = true;
+    lapsContainer.innerHTML = "";
+});
